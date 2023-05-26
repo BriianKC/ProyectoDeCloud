@@ -10,8 +10,8 @@ namespace PELICULAS.ENTIDADES
     {
         public int Id { get; set; }   //pk sugerencia de tipo INT
         public string Nombres { get; set; }
-        public String Nacionalidad { get; set; }
-        public String Genero { get; set; }
+        public string Nacionalidad { get; set; }
+        public string Genero { get; set; }
         public int Edad { get; set; }
 
         //relaciones

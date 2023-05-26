@@ -8,12 +8,12 @@ namespace PELICULAS.WebMVC.Controllers
     public class PeliculasController : Controller
     {
 
-        private string Url= "https://localhost:7265/api/Peliculas";
-
+        private readonly string Url;
         private CRUD<Pelicula> CRUD { get; set; }
-        public PeliculasController()
+        public PeliculasController(IConfiguration configuration)
         {
-            CRUD = new CRUD<Pelicula>();
+            this.Url = configuration["Url"]+"Peliculas/";
+            CRUD =new CRUD<Pelicula>();
         }
         // GET: PeliculasController
         public ActionResult Index()
@@ -42,7 +42,7 @@ namespace PELICULAS.WebMVC.Controllers
         {
             try
             {
-                CRUD.insert(Url,datos);
+                CRUD.Insert(Url,datos);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -65,7 +65,7 @@ namespace PELICULAS.WebMVC.Controllers
         {
             try
             {
-                CRUD.update(Url,id.ToString(),datos);
+                CRUD.Update(Url,id.ToString(),datos);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -88,7 +88,7 @@ namespace PELICULAS.WebMVC.Controllers
         {
             try
             {
-                CRUD.delete(Url,id.ToString());
+                CRUD.Delete(Url,id.ToString());
                 return RedirectToAction(nameof(Index));
             }
             catch
