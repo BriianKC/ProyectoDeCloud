@@ -24,22 +24,26 @@ namespace PELICULA.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Director>>> GetDirector()
         {
-          if (_context.Director == null)
+          if (_context.Directores == null)
           {
               return NotFound();
           }
-            return await _context.Director.ToListAsync();
+
+            var data = _context.Peliculas.Include(p => p.Director);
+            return await _context.Directores.Include(p=>p.Peliculas).ToListAsync();
         }
 
         // GET: api/Directores/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Director>> GetDirector(int id)
         {
-          if (_context.Director == null)
+          if (_context.Directores == null)
           {
               return NotFound();
           }
-            var director = await _context.Director.FindAsync(id);
+
+
+            var director =  _context.Directores.Include(p => p.Peliculas).First(p=> p.Id == id);
 
             if (director == null)
             {
@@ -85,11 +89,11 @@ namespace PELICULA.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Director>> PostDirector(Director director)
         {
-          if (_context.Director == null)
+          if (_context.Directores == null)
           {
               return Problem("Entity set 'DataContext.Director'  is null.");
           }
-            _context.Director.Add(director);
+            _context.Directores.Add(director);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetDirector", new { id = director.Id }, director);
@@ -99,17 +103,17 @@ namespace PELICULA.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDirector(int id)
         {
-            if (_context.Director == null)
+            if (_context.Directores == null)
             {
                 return NotFound();
             }
-            var director = await _context.Director.FindAsync(id);
+            var director = await _context.Directores.FindAsync(id);
             if (director == null)
             {
                 return NotFound();
             }
 
-            _context.Director.Remove(director);
+            _context.Directores.Remove(director);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -117,7 +121,7 @@ namespace PELICULA.API.Controllers
 
         private bool DirectorExists(int id)
         {
-            return (_context.Director?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Directores?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

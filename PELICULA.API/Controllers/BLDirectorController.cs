@@ -11,55 +11,55 @@ namespace PELICULA.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PeliculasController : ControllerBase
+    public class BLDirectorController : ControllerBase
     {
         private readonly DataContext _context;
 
-        public PeliculasController(DataContext context)
+        public BLDirectorController(DataContext context)
         {
             _context = context;
         }
 
-        // GET: api/Peliculas
+        // GET: api/DALPaises
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Pelicula>>> GetPelicula()
+        public async Task<ActionResult<IEnumerable<Director>>> GetDirectores()
         {
-          if (_context.Peliculas == null)
+          if (_context.Directores == null)
           {
               return NotFound();
           }
-            return await _context.Peliculas.Include(p=>p.Director).ToListAsync();
+            return await _context.Directores.ToListAsync();
         }
 
-        // GET: api/Peliculas/5
+        // GET: api/DALPaises/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Pelicula>> GetPelicula(int id)
+        public async Task<ActionResult<Director>> GetDirector(int id)
         {
-          if (_context.Peliculas == null)
+          if (_context.Directores == null)
           {
               return NotFound();
           }
-            var pelicula = _context.Peliculas.Include(p => p.Director).First(p=>p.Id==id);
+            var director = await _context.Directores.FindAsync(id);
 
-            if (pelicula == null)
+            if (director == null)
             {
                 return NotFound();
             }
 
-            return pelicula;
+            return director;
         }
 
-        // PUT: api/Peliculas/5
+        // PUT: api/DALPaises/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPelicula(int id, Pelicula pelicula)
+        public async Task<IActionResult> PutDirector(int id, Director director)
         {
-            if (id != pelicula.Id)
+            if (id != director.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(pelicula).State = EntityState.Modified;
+            _context.Entry(director).State = EntityState.Modified;
 
             try
             {
@@ -67,7 +67,7 @@ namespace PELICULA.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PeliculaExists(id))
+                if (!DirectorExists(id))
                 {
                     return NotFound();
                 }
@@ -80,44 +80,44 @@ namespace PELICULA.API.Controllers
             return NoContent();
         }
 
-        // POST: api/Peliculas
+        // POST: api/DALPaises
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Pelicula>> PostPelicula(Pelicula pelicula)
+        public async Task<ActionResult<Director>> PostDirector(Director director)
         {
-          if (_context.Peliculas == null)
+          if (_context.Directores == null)
           {
-              return Problem("Entity set 'DataContext.Pelicula'  is null.");
+              return Problem("Entity set 'DataContext.Directores'  is null.");
           }
-            _context.Peliculas.Add(pelicula);
+            _context.Directores.Add(director);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPelicula", new { id = pelicula.Id }, pelicula);
+            return CreatedAtAction("GetDirector", new { id = director.Id }, director);
         }
 
-        // DELETE: api/Peliculas/5
+        // DELETE: api/DALPaises/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePelicula(int id)
+        public async Task<IActionResult> DeleteDirector(int id)
         {
-            if (_context.Peliculas == null)
+            if (_context.Directores == null)
             {
                 return NotFound();
             }
-            var pelicula = await _context.Peliculas.FindAsync(id);
-            if (pelicula == null)
+            var director = await _context.Directores.FindAsync(id);
+            if (director == null)
             {
                 return NotFound();
             }
 
-            _context.Peliculas.Remove(pelicula);
+            _context.Directores.Remove(director);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool PeliculaExists(int id)
+        private bool DirectorExists(int id)
         {
-            return (_context.Peliculas?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Directores?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
